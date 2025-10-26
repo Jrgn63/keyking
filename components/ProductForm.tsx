@@ -219,6 +219,22 @@ export default function ProductForm({ initialData, onSubmit, isEditing = false }
               ))}
             </div>
           </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Connection</label>
+            <div className="flex flex-wrap gap-2">
+              {['wired', 'wireless'].map(connection => (
+                <label key={connection} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={formData.tags.includes(connection)}
+                    onChange={(e) => handleTagChange(connection, e.target.checked)}
+                    className="mr-1"
+                  />
+                  {connection}
+                </label>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
       <button

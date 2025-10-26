@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getReviews, addReview, updateReview, deleteReview } from '@/lib/reviews';
 
+export const dynamic = 'force-static';
+
 const ADMIN_PASSWORD = '10e10e1.5';
 
 async function verifyAdmin(request: Request) {

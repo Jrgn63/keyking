@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getProducts, addProduct, updateProduct, deleteProduct } from '@/lib/products';
 
+export const dynamic = 'force-static';
+
 const ADMIN_PASSWORD = '10e10e1.5';
 
 async function verifyAdmin(request: Request) {

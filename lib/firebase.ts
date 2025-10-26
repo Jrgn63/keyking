@@ -11,6 +11,21 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-export const auth = getAuth(app);
+// Check if Firebase config is available (for static export without env vars)
+export const isFirebaseReady = Object.values(firebaseConfig).some(val => val !== undefined);
+
+let app;
+let db;
+let auth;
+
+if (isFirebaseReady) {
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  auth = getAuth(app);
+} else {
+  // For static export, set to null
+  db = null;
+  auth = null;
+}
+
+export { db, auth };

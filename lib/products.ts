@@ -59,6 +59,33 @@ export async function getProducts(search?: string, category?: string, tags?: str
       );
     }
 
+    // Sort products
+    filteredProducts.sort((a, b) => {
+      // If tags are selected, prioritize by tag relevance (number of matching tags)
+      if (tags && tags.length > 0) {
+        const aMatches = a.tags.filter(tag => tags.includes(tag)).length;
+        const bMatches = b.tags.filter(tag => tags.includes(tag)).length;
+        if (aMatches !== bMatches) {
+          return bMatches - aMatches; // More matches first
+        }
+      }
+
+      // Secondary sort by the specified field
+      const sortField = sortBy || 'createdAt';
+      const sortDir = sortOrder === 'asc' ? 1 : -1;
+
+      let aVal: any = a[sortField];
+      let bVal: any = b[sortField];
+
+      if (sortField === 'name') {
+        return sortDir * aVal.localeCompare(bVal);
+      } else if (sortField === 'price') {
+        return sortDir * (aVal - bVal);
+      } else { // createdAt
+        return sortDir * (aVal.getTime() - bVal.getTime());
+      }
+    });
+
     return filteredProducts;
   } catch (error) {
     console.error('Error fetching products:', error);
