@@ -4,6 +4,7 @@ import './globals.css';
 import { CartProvider } from '@/context/CartContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,7 +23,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <CartProvider>
           <div className="min-h-screen flex flex-col">
-            <Header />
+            <Suspense fallback={<div>Loading header...</div>}>
+              <Header />
+            </Suspense>
             <main className="flex-grow">
               {children}
             </main>

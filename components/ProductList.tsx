@@ -57,9 +57,5 @@ function ProductListContent({ initialProducts }: ProductListProps) {
 }
 
 export default function ProductList({ initialProducts }: ProductListProps) {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <ProductListContent initialProducts={initialProducts} />
-    </Suspense>
-  );
+  return <ProductListContent initialProducts={initialProducts} />;
 }

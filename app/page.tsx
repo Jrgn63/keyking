@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { getProducts } from '@/lib/products';
 import { getReviews } from '@/lib/reviews';
 import ProductList from '@/components/ProductList';
@@ -37,7 +38,9 @@ export default async function Home() {
         </p>
       </div>
 
-      <ProductList initialProducts={productsWithRatings} />
+      <Suspense fallback={<div className="text-center py-4">Loading products...</div>}>
+        <ProductList initialProducts={productsWithRatings} />
+      </Suspense>
     </div>
   );
 }
