@@ -1,17 +1,23 @@
 import { NextResponse } from 'next/server';
 import { getProducts, addProduct, updateProduct, deleteProduct } from '@/lib/products';
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 const ADMIN_PASSWORD = '10e10e1.5';
 
 async function verifyAdmin(request: Request) {
   const authHeader = request.headers.get('Authorization');
+  console.log('Auth header:', authHeader);
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    console.log('Auth failed: missing or invalid header');
     return false;
   }
   const token = authHeader.substring(7);
-  return token === ADMIN_PASSWORD;
+  console.log('Token:', token);
+  console.log('Expected password:', ADMIN_PASSWORD);
+  const isValid = token === ADMIN_PASSWORD;
+  console.log('Is valid:', isValid);
+  return isValid;
 }
 
 export async function GET(request: Request) {
@@ -58,6 +64,7 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     const body = await request.json();
+    console.log('Update request body:', body);
     const { id, name, shortDescription, longDescription, price, imageUrls, stock, category, tags, discount } = body;
     if (!id) {
       return NextResponse.json({ error: 'Product ID required' }, { status: 400 });
@@ -65,7 +72,7 @@ export async function PUT(request: Request) {
     await updateProduct(id, { name, shortDescription, longDescription, price, imageUrls, stock, category, tags, discount });
     return NextResponse.json({ message: 'Product updated' });
   } catch (error) {
-    console.error('Error updating product:', error);
+    console.error('Full error updating product:', error);
     return NextResponse.json({ error: 'Failed to update product' }, { status: 500 });
   }
 }

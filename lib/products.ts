@@ -177,9 +177,13 @@ export async function updateProduct(id: string, productData: Partial<Omit<Produc
   try {
     const productRef = doc(db, 'products', id);
     const updateData: any = {
-      ...productData,
       updatedAt: serverTimestamp(),
     };
+    for (const key in productData) {
+      if (key !== 'id' && productData[key as keyof typeof productData] !== undefined) {
+        updateData[key] = productData[key as keyof typeof productData];
+      }
+    }
     if (productData.name) {
       updateData.slug = slugify(productData.name);
     }

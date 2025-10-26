@@ -45,6 +45,8 @@ export default function CheckoutPage() {
       const { url } = await response.json();
 
       if (url) {
+        // Clear cart after successful checkout
+        dispatch({ type: 'CLEAR_CART' });
         redirect(url);
       }
     } catch (error) {

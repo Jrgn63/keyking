@@ -86,18 +86,24 @@ export default function AdminPage() {
 
   const handleUpdateProduct = async (data: Omit<Product, 'id' | 'slug' | 'createdAt' | 'updatedAt'>) => {
     if (editingProduct) {
+      const authHeader = `Bearer ${ADMIN_PASSWORD}`;
+      console.log('Sending auth header:', authHeader);
+      console.log('Sending body:', { id: editingProduct.id, ...data });
       const response = await fetch('/api/products', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${ADMIN_PASSWORD}`,
+          'Authorization': authHeader,
         },
         body: JSON.stringify({ id: editingProduct.id, ...data }),
       });
+      console.log('Response status:', response.status);
       if (response.ok) {
         setEditingProduct(null);
         fetchProducts();
       } else {
+        const errorText = await response.text();
+        console.error('Update error response:', errorText);
         alert('Failed to update product');
       }
     }
