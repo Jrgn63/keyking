@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { ShoppingCart, Search, Filter, ChevronDown } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -11,6 +12,7 @@ interface FilterOptions {
 
 export default function Header() {
   const { state } = useCart();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [sortOption, setSortOption] = useState<string>('createdAt-desc');
@@ -39,7 +41,7 @@ export default function Header() {
     const [sortBy, sortOrder] = sortOption.split('-');
     params.set('sortBy', sortBy);
     params.set('sortOrder', sortOrder);
-    window.location.href = `/?${params.toString()}`;
+    router.push(`/?${params.toString()}`);
   };
 
   const toggleTag = (tag: string) => {
@@ -52,7 +54,7 @@ export default function Header() {
     setSearchQuery('');
     setSelectedTags([]);
     setSortOption('createdAt-desc');
-    window.location.href = '/';
+    router.push('/');
   };
 
   return (

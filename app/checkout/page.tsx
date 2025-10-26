@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
 import CartItem from '@/components/CartItem';
+import { redirect } from 'next/navigation';
 
 export default function CheckoutPage() {
   const { state, dispatch } = useCart();
@@ -44,7 +45,7 @@ export default function CheckoutPage() {
       const { url } = await response.json();
 
       if (url) {
-        window.location.href = url;
+        redirect(url);
       }
     } catch (error) {
       console.error('Error creating checkout session:', error);

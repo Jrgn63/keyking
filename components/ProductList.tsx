@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Product } from '@/types';
 import ProductCard from './ProductCard';
 
@@ -8,19 +9,20 @@ interface ProductListProps {
   initialProducts: Product[];
 }
 
-export default function ProductList({ initialProducts }: ProductListProps) {
+function ProductListContent({ initialProducts }: ProductListProps) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     // Check URL params on mount and update products accordingly
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(searchParams.toString());
     if (urlParams.toString()) {
       fetchProducts(urlParams);
     } else {
       setProducts(initialProducts);
     }
-  }, [initialProducts]);
+  }, [initialProducts, searchParams]);
 
   const fetchProducts = async (params: URLSearchParams) => {
     setLoading(true);
@@ -51,5 +53,13 @@ export default function ProductList({ initialProducts }: ProductListProps) {
         </div>
       )}
     </div>
+  );
+}
+
+export default function ProductList({ initialProducts }: ProductListProps) {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProductListContent initialProducts={initialProducts} />
+    </Suspense>
   );
 }
